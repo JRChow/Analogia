@@ -398,13 +398,13 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.file == '3p':
-        file = '../../data/attribu_story/99_temp.story'
+        file = '../../data/attribution/99_temp.story'
     elif args.file == 'condition':
-        file = '../../data/attribu_story/3_condition.story'
+        file = '../../data/attribution/3_condition.story'
     elif args.file == 'success':
-        file = '../../data/attribu_story/1_success.story'
+        file = '../../data/attribution/01_success.story'
 
-    json_save = '../../data/attribu_story/99_temp.json'
+    json_save = '../../data/attribution/99_temp.json'
     data = load_story(file, json_save)
 
     concepts = data["concepts"]
