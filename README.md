@@ -1,7 +1,8 @@
 # Analogia
 
 ## Requirements
-* Install these with Python 3.6
+* Python 3.6
+* Install these
 ```
 pip install --upgrade git+git://github.com/zhijing-jin/efficiency.git
 # many other packages as mentioned in code/parser
@@ -9,11 +10,10 @@ pip install --upgrade git+git://github.com/zhijing-jin/efficiency.git
 
 
 * CoreNLP Package
-	* Download a java package onto the server, [Corenlp](https://stanfordnlp.github.io/CoreNLP/download.html)
-	* Then install the [python api](https://github.com/smilli/py-corenlp)
-	* 大致就是先download java的package，然后用python的api跑一下，其中需要开server的port 9000。
-
-
+  * Download a java package onto the server, [Corenlp](https://stanfordnlp.github.io/CoreNLP/download.html)
+  * Then install the [python api](https://github.com/smilli/py-corenlp)
+  * 大致就是先download java的package，然后用python的api跑一下，其中需要开server的port 9000。
+* Install NLTK with `sudo pip install -U nltk`
 
 ## Code
 * Play with CoreNLP parser by
