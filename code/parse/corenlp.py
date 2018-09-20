@@ -47,7 +47,7 @@ def test():
     nlp = StanfordCoreNLP('http://localhost:9000')
 
     sent = ["I am healthy.", "I am healthy than others."]
-    pprint(parse_sent(sent, nlp))
+    pprint(parse_sent(sent[0], nlp))
 
     sent = ["I won something.", "I won a game."]
     matched = compare(sent[0], sent[1], nlp)
