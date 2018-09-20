@@ -18,13 +18,13 @@ pip install --upgrade --user git+git://github.com/zhijing-jin/efficiency.git
 ## Code
 * Play with CoreNLP parser by
 ```
-cd code/parser 
+cd code/parse 
 python corenlp.py
 ```
 
 * Run Story_Matching examples by
 
 ```
-cd code/parser 
+cd code/parse 
 python start.py -file success
 ```
