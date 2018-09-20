@@ -44,8 +44,8 @@ def struc_match(model, query, verbose=True):
         - the center verb should be same or subword
         - all links with center verb should have the same attr
     example:
-        - I am healthy. <-> You are healthy.
         - I won a game. <-> He won a competition.
+        - I am healthy. <-> Bob is healthy.
         - I won it once. <-> I won that once.
     '''
     pdb.set_trace()
