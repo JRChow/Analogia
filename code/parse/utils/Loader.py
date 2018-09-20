@@ -1,9 +1,9 @@
 import json
-import re
 from utils.Constants import *
 
 
 def get_content(file):
+    """Extract content of file (without comments) into a list of lines."""
     with open(file, 'r') as f:
         return [line.strip() for line in f
                 if line.strip() and line[:len(COMMENT)] != COMMENT]
@@ -20,6 +20,7 @@ def load_story(file, json_save=''):
 
 
 def detect(content, ix, line, length, patt):
+    """Return title and content of detected pattern."""
     titl = line[len(patt):-2]
     detected = [titl, []]
     for det_i in range(ix + 1, length):
@@ -40,6 +41,7 @@ def get_rules(line):
 
 
 def parse_content(content):
+    """Return dictionary of concepts, history, and stories."""
     patt_c = CONCEPT_START[:-2]
     patt_h = HISTORY_START[:-2]
     patt_s = STORY_START[:-2]
@@ -70,4 +72,4 @@ def parse_content(content):
 
 
 if __name__ == "__main__":
-    load_story('../../../data/attribu_story/1_fail.story')
+    print(load_story('../../../data/attribution/01_success.story'))

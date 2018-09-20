@@ -25,12 +25,14 @@ RULE_PATT = OrderedDict({
     "abduction": "^If .*, then .* must be .*\.",
     "prediction": "^If .*, then .*\.",
     "enablement": ".* enables .*\."})
+
 RULE_SEPA = OrderedDict({
     "explanation": "^If |, then |",
     "presumption": "^If |, then |",
     "abduction": "^If |, then |",
     "prediction": "^If |, then |",
     "enablement": "\."})
+
 RULE_PATT = {key: re.compile(val) for key, val in RULE_PATT.items()}
 
 

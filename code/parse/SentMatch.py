@@ -8,10 +8,10 @@ import pdb
 
 
 def trunk_match(model, query, verbose=True):
-    '''
+    """
     I will win this match.
     Yesterday he won that match easily.
-    '''
+    """
     trunk_m, trunk_q = model.get_trunk(), query.get_trunk()
     match = if_hypo(trunk_m["verb"], trunk_q["verb"], 'v', verbose=verbose)
     match = match and if_hypo(trunk_m["obj"], trunk_q["obj"], verbose=verbose)
@@ -63,5 +63,4 @@ def struc_match(model, query, verbose=True):
 
 
 if __name__ == "__main__":
-
     show_var(["if_same_stem(['good','better', 'best'], 'a', verbose=True)"])
