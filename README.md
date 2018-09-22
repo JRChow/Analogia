@@ -28,3 +28,16 @@ python corenlp.py
 cd code/parse 
 python start.py -file success
 ```
+
+* Run like-analogy model by
+	* Start up Stanford CoreNLP server with minimum 4 GB of memory (can customise)
+	```
+	cd stanford-corenlp-full-2018-02-27
+	java -mx4g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer
+	```
+	
+	* Activate virtual environment with `source activate python3`
+
+	* Run the script with `python like_analogy.py`
+
+	* Input query in format of "I like \_\_\_." where \_\_\_ can be "wolves", "cats", etc.	
