@@ -13,23 +13,23 @@ STORY0 = ["Alice likes Bob.",
           "Alice sends a gift to Bob.",
           "Bob is happy.",
           "Bob invites Alice for dinner."]
-# Natural
+# Natural (1)
 STORY1 = ["John likes Mary.",
           "John sends a gift to Mary.",
           "Mary is happy.",
           "Mary invites John for dinner."]
-# Natural but not 100% sure
+# Natural but not 100% sure (0.666667)
 STORY2 = ["John likes Mary.",
           "John sends a gift to Mary."]
-# Natural but not 100% sure
+# Natural but not 100% sure (0.666667)
 STORY3 = ["Mary is happy.",
           "Mary invites John for dinner."]
-# Strange
+# Strange (0.25)
 STORY4 = ["John likes Mary.",
           "Mary sends a gift to John.",
           "Mary is happy.",
           "Mary invites John for dinner."]
-# Strange
+# Strange (0.25)
 STORY5 = ["John likes Mary.",
           "Mary sends a gift to Mary.",
           "John is happy.",
@@ -40,6 +40,9 @@ NLP_NER_PROPERTIES = {'annotators': 'ner',
                       'outputFormat': 'json'}
 NLP_DEP_PARSE_PROPERTIES = {'annotators': 'depparse',
                             'outputFormat': 'json'}
+
+NATURAL_THRESHOLD = 0.8335
+DOUBTFUL_NATURAL_THRESHOLD = 0.4583
 
 
 def get_story_ner(story_list):
@@ -200,10 +203,25 @@ def get_similar_sentence_pairs(meta_story0, meta_story1):
     return similar_sentence_pairs
 
 
+def calc_similarity_score(story0_list, story1_list, longest_match):
+    numerator = len(longest_match) * 2
+    denominator = len(story0_list) + len(story1_list)
+    return numerator/denominator
+
+
+def judge_story(similarity_score):
+    if similarity_score > NATURAL_THRESHOLD:
+        return "Natural."
+    elif similarity_score > DOUBTFUL_NATURAL_THRESHOLD:
+        return "Natural (but not 100% sure)."
+    else:
+        return "Strange."
+
+
 if __name__ == "__main__":
     # Modify here
     given_story = STORY0
-    query_story = STORY4
+    query_story = STORY1
 
     print("[Given]\n" + "\n".join(given_story) + "\n")
     print("[Query]\n" + "\n".join(query_story) + "\n")
@@ -212,3 +230,7 @@ if __name__ == "__main__":
     print("----- Similar Sentence Pairs -----")
     for pair in similar_sentences:
         print("\n%s\n%s\n" % (given_story[pair[0]], query_story[pair[1]]))
+    score = calc_similarity_score(given_story, query_story, similar_sentences)
+    print("----- Diagnosis -----")
+    print("==> Similarity Score = %f" % score)
+    print("==> Verdict = %s" % judge_story(score))
