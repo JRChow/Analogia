@@ -159,19 +159,19 @@ def main():
     make_viz(STORY0, get_causal_relation_matrix(STORY0), g)
     make_viz(STORY1, get_causal_relation_matrix(STORY2), g)
 
-
+    n_pair=1
     for pair in similar_sentences:
         print("\n%s\n%s\n" % (given_story[pair[0]], query_story[pair[1]]))
-        similar_sentence_pairs+=given_story[pair[0]]+ query_story[pair[1]]
+        similar_sentence_pairs+=str(n_pair)+". "+given_story[pair[0]]+", "+query_story[pair[1]]+"\n"
         make_viz(given_story[pair[0]], get_causal_relation_matrix(given_story[pair[0]]), g, pair=True)
         make_viz(query_story[pair[1]], get_causal_relation_matrix(query_story[pair[1]]), g, pair=True)
-
+        n_pair+=1
     score = calc_similarity_score(given_story, query_story, similar_sentences)
     print("----- Diagnosis -----")
     print("==> Similarity Score = %f" % score)
     print("==> Verdict = %s" % judge_story(score))
 
-    summary="Similarity: "+score+"\n"+str(similar_sentence_pairs)
+    summary="Similarity: "+str(score)+"\n"+str(similar_sentence_pairs)
     g.attr(label=summary, fontsize='40')
     g.render('test.gv', view=True)
 
