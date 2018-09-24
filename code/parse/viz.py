@@ -1,7 +1,7 @@
 import os
 from StoryMatch import *
 
-os.environ["PATH"] += os.pathsep + 'C:/Users/Re/Anaconda3/Library/bin/graphviz'  # add path, run on server
+#os.environ["PATH"] += os.pathsep + 'C:/Users/Re/Anaconda3/Library/bin/graphviz'  # add path, run on server
 from graphviz import Digraph
 import numpy as np
 
@@ -173,8 +173,8 @@ def main():
 
     summary="Similarity: "+str(score)+"\n"+str(similar_sentence_pairs)
     g.attr(label=summary, fontsize='40')
-    g.render('test.gv', view=True)
-
+    #g.render('StoryMatch.gv', view=True)
+    g.render('StoryMatch.gv')
 
 if __name__ == '__main__':
     main()
