@@ -142,7 +142,7 @@ def main():
     global n_node_previous_story
     n_node = 0
     n_node_previous_story = 0
-    g = Digraph(engine='dot', format='jpg')
+    g = Digraph(engine='dot', format='png')
     g.attr('node', shape='circle', color='black')
     g.graph_attr['rankdir'] = 'LR'
 
