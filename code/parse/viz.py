@@ -104,24 +104,40 @@ def viz(i_x, i_y, i_r, g, pair=False):
             g.edge(y, x, color='grey', penwidth=PENWIDTH, arrowsize=ARROWSIZE)
 
 
+
 def make_viz(sent_arr, list_of_relation_mat, g, pair=False):
     global n_node
     global n_node_previous_story
-    for sent in sent_arr:  # assign # to each node of sent
-        g.node(str(n_node), sent)
-        n_node += 1
-    i_r = 0
-    for relation_mat in list_of_relation_mat:
-        i_y = 0
-        for y in relation_mat:
-            i_x = 0
-            for x in y:
-                if x == 1:
-                    viz(i_x + n_node_previous_story, i_y + n_node_previous_story, i_r, g, pair)
-                i_x += 1
-            i_y += 1
-        i_r += 1
-    n_node_previous_story += (n_node-n_node_previous_story)  #= the increase in num of node
+    if pair == False:
+        for sent in sent_arr:  # assign # to each new node of sent
+            g.node(str(n_node), sent)
+            node_num_dict[sent] = n_node
+            n_node += 1
+        i_r = 0
+        for relation_mat in list_of_relation_mat:
+            i_y = 0
+            for y in relation_mat:
+                i_x = 0
+                for x in y:
+                    if x == 1:
+                        viz(i_x + n_node_previous_story, i_y + n_node_previous_story, i_r, g, pair)
+                    i_x += 1
+                i_y += 1
+            i_r += 1
+        n_node_previous_story += (n_node - n_node_previous_story)  # = the increase in num of node
+
+    if pair == True:
+        i_r = 0
+        for relation_mat in list_of_relation_mat:
+            i_y = 0
+            for y in relation_mat:
+                i_x = 0
+                for x in y:
+                    if x == 1:
+                        viz(node_num_dict.get(sent_arr[i_x]), node_num_dict.get(sent_arr[i_y]), i_r, g, pair)
+                    i_x += 1
+                i_y += 1
+            i_r += 1
 
 def get_causal_relation_matrix(sent_arr):
     n_nodes = len(sent_arr)
@@ -140,9 +156,11 @@ def main():
     ARROWSIZE = '2'
     global n_node #total num of nodes
     global n_node_previous_story
+    global node_num_dict
+    node_num_dict = {}
     n_node = 0
     n_node_previous_story = 0
-    g = Digraph(engine='dot', format='png')
+    g = Digraph(engine='dot', format='png', strict=True)  # strict (bool) – Rendering should merge multi-edges.
     g.attr('node', shape='circle', color='black')
     g.graph_attr['rankdir'] = 'LR'
 
@@ -162,9 +180,11 @@ def main():
     n_pair=1
     for pair in similar_sentences:
         print("\n%s\n%s\n" % (given_story[pair[0]], query_story[pair[1]]))
-        similar_sentence_pairs+=str(n_pair)+". "+given_story[pair[0]]+"\n"+query_story[pair[1]]+"\n"
-        make_viz(given_story[pair[0]], get_causal_relation_matrix(given_story[pair[0]]), g, pair=True)
-        make_viz(query_story[pair[1]], get_causal_relation_matrix(query_story[pair[1]]), g, pair=True)
+        similar_sentence_pairs+=str(n_pair)+". "+given_story[pair[0]]+"\t"+query_story[pair[1]]+"\n"
+        list_of_given_story_pair=[given_story[pair[0]]]
+        list_of_query_story_pair=[query_story[pair[1]]]
+        make_viz(list_of_given_story_pair, get_causal_relation_matrix(list_of_given_story_pair), g, pair=True)#new numbering of node
+        make_viz(list_of_query_story_pair, get_causal_relation_matrix(list_of_query_story_pair), g, pair=True)#should be just 1 sent, fix the numbering
         n_pair+=1
     score = calc_similarity_score(given_story, query_story, similar_sentences)
     print("----- Diagnosis -----")
