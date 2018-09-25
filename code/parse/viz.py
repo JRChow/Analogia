@@ -53,7 +53,10 @@ def viz(i_x, i_y, i_r, g, pair=False):
             g.edge(y, x, color='grey')
     elif (pair == True):#matched pair
 
-        if r == "0":  # "causal":
+        if r=="-1":  # "bold node, no relation"
+            g.node(x, penwidth=PENWIDTH)
+            g.node(y, penwidth=PENWIDTH)
+        elif r == "0":  # "causal":
             g.node(y, penwidth=PENWIDTH)
             g.node(x, fillcolor='yellow', style='filled', penwidth=PENWIDTH)
             g.edge(y, x, penwidth=PENWIDTH, arrowsize=ARROWSIZE)
@@ -133,6 +136,9 @@ def make_viz(sent_arr, list_of_relation_mat, g, pair=False):
             for y in relation_mat:
                 i_x = 0
                 for x in y:
+                    if x == 0:
+                        i_r=-1
+                        viz(node_num_dict.get(sent_arr[i_x]), node_num_dict.get(sent_arr[i_y]), i_r, g, pair)
                     if x == 1:
                         viz(node_num_dict.get(sent_arr[i_x]), node_num_dict.get(sent_arr[i_y]), i_r, g, pair)
                     i_x += 1
@@ -145,6 +151,7 @@ def get_causal_relation_matrix(sent_arr):
     list_of_relation_mat = np.zeros((n_rel, n_nodes, n_nodes))
     for i in range(n_nodes - 1):  # all causal
         list_of_relation_mat[0][i][i + 1] = 1
+        print("causal made: "+str(i))
     return list_of_relation_mat
 
 def main():
@@ -183,8 +190,8 @@ def main():
         similar_sentence_pairs+=str(n_pair)+". "+given_story[pair[0]]+"\t"+query_story[pair[1]]+"\n"
         list_of_given_story_pair=[given_story[pair[0]]]
         list_of_query_story_pair=[query_story[pair[1]]]
-        make_viz(list_of_given_story_pair, get_causal_relation_matrix(list_of_given_story_pair), g, pair=True)#new numbering of node
-        make_viz(list_of_query_story_pair, get_causal_relation_matrix(list_of_query_story_pair), g, pair=True)#should be just 1 sent, fix the numbering
+        make_viz(list_of_given_story_pair, get_causal_relation_matrix(list_of_given_story_pair), g, pair=True)
+        make_viz(list_of_query_story_pair, get_causal_relation_matrix(list_of_query_story_pair), g, pair=True)
         n_pair+=1
     score = calc_similarity_score(given_story, query_story, similar_sentences)
     print("----- Diagnosis -----")
