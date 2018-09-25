@@ -181,8 +181,8 @@ def main():
 
     similar_sentences = get_longest_match(given_story, query_story)
 
-    make_viz(STORY0, get_causal_relation_matrix(STORY0), g)
-    make_viz(STORY1, get_causal_relation_matrix(STORY1), g)
+    make_viz(given_story, get_causal_relation_matrix(given_story), g)
+    make_viz(query_story, get_causal_relation_matrix(query_story), g)
 
     n_pair=1
     for pair in similar_sentences:
@@ -201,7 +201,7 @@ def main():
     summary="Similarity: "+str(score)+"\n"+str(similar_sentence_pairs)
     g.attr(label=summary, fontsize='40')
     #g.render('StoryMatch.gv', view=True)
-    g.render('StoryMatch.gv')
+    g.render('story1.gv')
 
 if __name__ == '__main__':
     main()
