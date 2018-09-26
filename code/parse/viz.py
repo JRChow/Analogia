@@ -2,16 +2,13 @@ from StoryMatch import *
 from graphviz import Digraph
 import numpy as np
 
-params = {'penwidth': '5', 'arrowsize': '2', 'format': 'png'}
+params = {'penwidth': '5', 'arrowsize': '2', 'format': 'png', 'shape': 'square', 'color': 'black', 'rankdir': 'LR'}
 node_num_dict = {}
 n_node = 0
 n_node_previous_story = 0
 
 def viz(i_x, i_y, i_r, g, pair=False):
-    """
-    0 1 y->x
-    1 0
-    """
+    # in adj matrix, var y causes var x
     x = str(i_x)
     y = str(i_y)
     r = str(i_r)
@@ -173,7 +170,7 @@ def get_causal_relation_matrix(sent_arr):
     return list_of_relation_mat
 
 
-def get_node_max(digraph):
+def get_node_max_size(digraph):
     import re
     heights = [height.split('=')[1] for height in re.findall('height=[0-9.]+', str(digraph))]
     widths = [width.split('=')[1] for width in re.findall('(?:^|\W)width=[0-9.]+', str(digraph))]
@@ -186,8 +183,8 @@ def main():
     # gv for extracting height, width
     # strict (bool) – Rendering should merge multi-edges.
     g = Digraph(engine='dot', format='gv', strict=True)  
-    g.attr('node', shape='square', color='black')
-    g.graph_attr['rankdir'] = 'LR'
+    g.attr('node', shape=params['shape'], color=params['color'])
+    g.graph_attr['rankdir'] = params['rankdir']
     
     #modify here
     given_story = STORY0
@@ -218,7 +215,7 @@ def main():
     g.attr(label=summary, fontsize='40')
 
     # flexible node size
-    params['height'], params['width'] = get_node_max(g.pipe().decode('utf-8'))
+    params['height'], params['width'] = get_node_max_size(g.pipe().decode('utf-8'))
     g.node_attr['width'] = params['width']
     g.node_attr['height'] = params['height']
     g.format = params['format']
