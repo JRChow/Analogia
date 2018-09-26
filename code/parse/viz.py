@@ -173,7 +173,7 @@ def main():
 
     #sent_arr = ["Mary likes John", "Mary sends a gift to John", "They are in love."]
     given_story = STORY0
-    query_story = STORY1
+    query_story = STORY5
     print("[Given]\n" + "\n".join(given_story) + "\n")
     print("[Query]\n" + "\n".join(query_story) + "\n")
 
@@ -201,7 +201,7 @@ def main():
     summary="Similarity: "+str(score)+"\n"+str(similar_sentence_pairs)
     g.attr(label=summary, fontsize='40')
     #g.render('StoryMatch.gv', view=True)
-    g.render('story1.gv')
+    g.render('story5.gv')
 
 if __name__ == '__main__':
     main()
