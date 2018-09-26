@@ -1,4 +1,3 @@
-import os
 from StoryMatch import *
 
 from graphviz import Digraph
