@@ -138,12 +138,12 @@ def make_viz(sent_arr, list_of_relation_mat, g, pair=False):
                 for x in y:
                     if x == 0:
                         i_r=-1
-                        g.node(node_num_dict.get(sent_arr[i_x]), sent_arr[i_x]+"\n["+str(pair)+"]")
-                        g.node(node_num_dict.get(sent_arr[i_y]), sent_arr[i_y] + "\n[" + str(pair) + "]")
+                        g.node(str(node_num_dict.get(sent_arr[i_x])), sent_arr[i_x]+"\n["+str(pair)+"]")
+                        g.node(str(node_num_dict.get(sent_arr[i_y])), sent_arr[i_y] + "\n[" + str(pair) + "]")
                         viz(node_num_dict.get( sent_arr[i_x]+"\n["+str(pair)+"]" ), node_num_dict.get(sent_arr[i_y]+"\n["+str(pair)+"]"), i_r, g, pair)
                     if x == 1:
-                        g.node(node_num_dict.get(sent_arr[i_x]), sent_arr[i_x]+"\n["+str(pair)+"]")
-                        g.node(node_num_dict.get(sent_arr[i_y]), sent_arr[i_y] + "\n[" + str(pair) + "]")
+                        g.node(str(node_num_dict.get(sent_arr[i_x])), sent_arr[i_x]+"\n["+str(pair)+"]")
+                        g.node(str(node_num_dict.get(sent_arr[i_y])), sent_arr[i_y] + "\n[" + str(pair) + "]")
                         viz(node_num_dict.get(sent_arr[i_x] + "\n[" + str(pair) + "]"),
                             node_num_dict.get(sent_arr[i_y] + "\n[" + str(pair) + "]"), i_r, g, pair)
 
