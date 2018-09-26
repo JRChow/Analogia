@@ -51,7 +51,7 @@ def viz(i_x, i_y, i_r, g, pair=False):
         elif r == "9":  # "in_order_to":
             g.node(x, fillcolor='grey', style='filled')
             g.edge(y, x, color='grey')
-    elif (pair == True):#matched pair
+    else:#matched pair
 
         if r=="-1":  # "bold node, no relation"
             g.node(x, penwidth=PENWIDTH)
@@ -129,7 +129,7 @@ def make_viz(sent_arr, list_of_relation_mat, g, pair=False):
             i_r += 1
         n_node_previous_story += (n_node - n_node_previous_story)  # = the increase in num of node
 
-    if pair == True:
+    else:
         i_r = 0
         for relation_mat in list_of_relation_mat:
             i_y = 0
@@ -157,7 +157,7 @@ def get_causal_relation_matrix(sent_arr):
     list_of_relation_mat = np.zeros((n_rel, n_nodes, n_nodes))
     for i in range(n_nodes - 1):  # all causal
         list_of_relation_mat[0][i][i + 1] = 1
-        
+
     return list_of_relation_mat
 
 
