@@ -138,9 +138,15 @@ def make_viz(sent_arr, list_of_relation_mat, g, pair=False):
                 for x in y:
                     if x == 0:
                         i_r=-1
-                        viz(node_num_dict.get(sent_arr[i_x]), node_num_dict.get(sent_arr[i_y]), i_r, g, pair)
+                        g.node(node_num_dict.get(sent_arr[i_x]), sent+"\n["+str(pair)+"]")
+                        g.node(node_num_dict.get(sent_arr[i_y]), sent + "\n[" + str(pair) + "]")
+                        viz(node_num_dict.get( sent_arr[i_x]+"\n["+str(pair)+"]" ), node_num_dict.get(sent_arr[i_y]+"\n["+str(pair)+"]"), i_r, g, pair)
                     if x == 1:
-                        viz(node_num_dict.get(sent_arr[i_x]), node_num_dict.get(sent_arr[i_y]), i_r, g, pair)
+                        g.node(node_num_dict.get(sent_arr[i_x]), sent+"\n["+str(pair)+"]")
+                        g.node(node_num_dict.get(sent_arr[i_y]), sent + "\n[" + str(pair) + "]")
+                        viz(node_num_dict.get(sent_arr[i_x] + "\n[" + str(pair) + "]"),
+                            node_num_dict.get(sent_arr[i_y] + "\n[" + str(pair) + "]"), i_r, g, pair)
+
                     i_x += 1
                 i_y += 1
             i_r += 1
@@ -153,6 +159,19 @@ def get_causal_relation_matrix(sent_arr):
         list_of_relation_mat[0][i][i + 1] = 1
         print("causal made: "+str(i))
     return list_of_relation_mat
+
+
+def get_node_max(digraph):
+    import re
+
+    heights = [height.split('=')[1] for height in re.findall('height=[0-9.]+', str(digraph))]
+    widths = [width.split('=')[1] for width in re.findall('(?:^|\W)width=[0-9.]+', str(digraph))]
+    print(heights)
+    print(widths)
+    print(str(digraph))
+    heights.sort(key=float)
+    widths.sort(key=float)
+    return heights[len(heights) - 1], widths[len(widths) - 1]
 
 def main():
     global n_pair
@@ -167,8 +186,9 @@ def main():
     node_num_dict = {}
     n_node = 0
     n_node_previous_story = 0
-    g = Digraph(engine='dot', format='png', strict=True)  # strict (bool) – Rendering should merge multi-edges.
-    g.attr('node', shape='circle', color='black')
+    # gv for extracting height, width
+    g = Digraph(engine='dot', format='gv', strict=True)  # strict (bool) – Rendering should merge multi-edges.
+    g.attr('node', shape='square', color='black')
     g.graph_attr['rankdir'] = 'LR'
 
     #sent_arr = ["Mary likes John", "Mary sends a gift to John", "They are in love."]
@@ -183,15 +203,14 @@ def main():
 
     make_viz(given_story, get_causal_relation_matrix(given_story), g)
     make_viz(query_story, get_causal_relation_matrix(query_story), g)
-
     n_pair=1
     for pair in similar_sentences:
         print("\n%s\n%s\n" % (given_story[pair[0]], query_story[pair[1]]))
-        similar_sentence_pairs+=str(n_pair)+". "+given_story[pair[0]]+"\t"+query_story[pair[1]]+"\n"
+        similar_sentence_pairs+="["+str(n_pair)+"] "+given_story[pair[0]]+"\t"+query_story[pair[1]]+"\n"
         list_of_given_story_pair=[given_story[pair[0]]]
         list_of_query_story_pair=[query_story[pair[1]]]
-        make_viz(list_of_given_story_pair, get_causal_relation_matrix(list_of_given_story_pair), g, pair=True)
-        make_viz(list_of_query_story_pair, get_causal_relation_matrix(list_of_query_story_pair), g, pair=True)
+        make_viz(list_of_given_story_pair, get_causal_relation_matrix(list_of_given_story_pair), g, pair=n_pair)
+        make_viz(list_of_query_story_pair, get_causal_relation_matrix(list_of_query_story_pair), g, pair=n_pair)
         n_pair+=1
     score = calc_similarity_score(given_story, query_story, similar_sentences)
     print("----- Diagnosis -----")
@@ -200,6 +219,13 @@ def main():
 
     summary="Similarity: "+str(score)+"\n"+str(similar_sentence_pairs)
     g.attr(label=summary, fontsize='40')
+
+    #flexible node size
+    params = {}
+    params['height'], params['width'] = get_node_max(g.pipe().decode('utf-8'))
+    g.node_attr['width'] = params['width']
+    g.node_attr['height'] = params['height']
+    g.format = 'png'
     #g.render('StoryMatch.gv', view=True)
     g.render('story1.gv')
 
