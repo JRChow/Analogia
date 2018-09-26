@@ -1,5 +1,5 @@
 from StoryMatch import *
-from graphviz import Digraph
+from graphstyle_node_edge import Digraph
 import numpy as np
 
 params = {'penwidth': '5', 'arrowsize': '2', 'format': 'png', 'shape': 'square', 'color': 'black', 'rankdir': 'LR'}
@@ -7,7 +7,7 @@ node_num_dict = {}
 n_node = 0
 n_node_previous_story = 0
 
-def viz(i_x, i_y, i_r, g, pair=False):
+def style_node_edge(i_x, i_y, i_r, g, pair=False):
     # in adj matrix, var y causes var x
     x = str(i_x)
     y = str(i_y)
@@ -106,7 +106,7 @@ def viz(i_x, i_y, i_r, g, pair=False):
             g.edge(y, x, color='grey', penwidth=params['penwidth'], arrowsize=params['arrowsize'])
 
 
-def make_viz(sent_arr, list_of_relation_mat, g, pair=False):
+def make_node(sent_arr, list_of_relation_mat, g, pair=False):
     global n_node
     global n_node_previous_story
     if pair == False:
@@ -121,7 +121,7 @@ def make_viz(sent_arr, list_of_relation_mat, g, pair=False):
                 i_x = 0
                 for x in y:
                     if x == 1:
-                        viz(i_x + n_node_previous_story, i_y + n_node_previous_story, i_r, g, pair)
+                        style_node_edge(i_x + n_node_previous_story, i_y + n_node_previous_story, i_r, g, pair)
                     i_x += 1
                 i_y += 1
             i_r += 1
@@ -143,7 +143,7 @@ def make_viz(sent_arr, list_of_relation_mat, g, pair=False):
                         node_num_dict[sent_arr[i_y] + annotation] = node_num_dict.get(sent_arr[i_y])
                         # del old entries
                         del node_num_dict[sent_arr[i_x]]
-                        viz(node_num_dict.get(sent_arr[i_x] + annotation),
+                        style_node_edge(node_num_dict.get(sent_arr[i_x] + annotation),
                             node_num_dict.get(sent_arr[i_y] + annotation), i_r, g, pair)
                     if x == 1:
                         g.node(str(node_num_dict.get(sent_arr[i_x])), sent_arr[i_x] + annotation)
@@ -152,7 +152,7 @@ def make_viz(sent_arr, list_of_relation_mat, g, pair=False):
                         node_num_dict[sent_arr[i_y] + annotation] = node_num_dict.get(sent_arr[i_y])
                         # del old entries
                         del node_num_dict[sent_arr[i_x]]
-                        viz(node_num_dict.get(sent_arr[i_x] + annotation),
+                        style_node_edge(node_num_dict.get(sent_arr[i_x] + annotation),
                             node_num_dict.get(sent_arr[i_y] + annotation), i_r, g, pair)
 
                     i_x += 1
@@ -195,16 +195,16 @@ def main():
     similar_sentence_pairs = ""
     similar_sentences = get_longest_match(given_story, query_story)
 
-    make_viz(given_story, get_causal_relation_matrix(given_story), g)
-    make_viz(query_story, get_causal_relation_matrix(query_story), g)
+    make_node(given_story, get_causal_relation_matrix(given_story), g)
+    make_node(query_story, get_causal_relation_matrix(query_story), g)
     n_pair = 1
     for pair in similar_sentences:
         print("\n%s\n%s\n" % (given_story[pair[0]], query_story[pair[1]]))
         similar_sentence_pairs += "[" + str(n_pair) + "] " + given_story[pair[0]] + "\t" + query_story[pair[1]] + "\n"
         list_of_given_story_pair = [given_story[pair[0]]]
         list_of_query_story_pair = [query_story[pair[1]]]
-        make_viz(list_of_given_story_pair, get_causal_relation_matrix(list_of_given_story_pair), g, pair=n_pair)
-        make_viz(list_of_query_story_pair, get_causal_relation_matrix(list_of_query_story_pair), g, pair=n_pair)
+        make_node(list_of_given_story_pair, get_causal_relation_matrix(list_of_given_story_pair), g, pair=n_pair)
+        make_node(list_of_query_story_pair, get_causal_relation_matrix(list_of_query_story_pair), g, pair=n_pair)
         n_pair += 1
     score = round(calc_similarity_score(given_story, query_story, similar_sentences), 2)
     
