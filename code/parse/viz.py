@@ -157,7 +157,7 @@ def get_causal_relation_matrix(sent_arr):
     list_of_relation_mat = np.zeros((n_rel, n_nodes, n_nodes))
     for i in range(n_nodes - 1):  # all causal
         list_of_relation_mat[0][i][i + 1] = 1
-        print("causal made: "+str(i))
+        
     return list_of_relation_mat
 
 
@@ -166,9 +166,7 @@ def get_node_max(digraph):
 
     heights = [height.split('=')[1] for height in re.findall('height=[0-9.]+', str(digraph))]
     widths = [width.split('=')[1] for width in re.findall('(?:^|\W)width=[0-9.]+', str(digraph))]
-    print(heights)
-    print(widths)
-    print(str(digraph))
+
     heights.sort(key=float)
     widths.sort(key=float)
     return heights[len(heights) - 1], widths[len(widths) - 1]
