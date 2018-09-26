@@ -194,7 +194,7 @@ def main():
     g.graph_attr['rankdir'] = 'LR'
 
     given_story = STORY0
-    query_story = STORY1
+    query_story = STORY2
     print("[Given]\n" + "\n".join(given_story) + "\n")
     print("[Query]\n" + "\n".join(query_story) + "\n")
 
@@ -213,7 +213,7 @@ def main():
         make_viz(list_of_given_story_pair, get_causal_relation_matrix(list_of_given_story_pair), g, pair=n_pair)
         make_viz(list_of_query_story_pair, get_causal_relation_matrix(list_of_query_story_pair), g, pair=n_pair)
         n_pair += 1
-    score = calc_similarity_score(given_story, query_story, similar_sentences)
+    score = round(calc_similarity_score(given_story, query_story, similar_sentences), 2)
     print("----- Diagnosis -----")
     print("==> Similarity Score = %f" % score)
     print("==> Verdict = %s" % judge_story(score))
@@ -228,9 +228,9 @@ def main():
     g.node_attr['height'] = params['height']
     g.format = params['format']
     # g.render('StoryMatch.gv', view=True)
-    output="story1.gv"
+    output = "story2.gv"
     g.render(output)
-    print("output "+output+"."+params['format'])
+    print("output " + output + "." + params['format'])
 
 
 if __name__ == '__main__':
