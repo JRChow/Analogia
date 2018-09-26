@@ -4,7 +4,7 @@ from StoryMatch import *
 from graphviz import Digraph
 import numpy as np
 
-params = {'penwidth': '5', 'arrowsize': '2'}
+params = {'penwidth': '5', 'arrowsize': '2', 'format': 'png'}
 node_num_dict = {}
 n_node = 0
 n_node_previous_story = 0
@@ -194,7 +194,7 @@ def main():
     g.graph_attr['rankdir'] = 'LR'
 
     given_story = STORY0
-    query_story = STORY5
+    query_story = STORY1
     print("[Given]\n" + "\n".join(given_story) + "\n")
     print("[Query]\n" + "\n".join(query_story) + "\n")
 
@@ -226,9 +226,11 @@ def main():
     params['height'], params['width'] = get_node_max(g.pipe().decode('utf-8'))
     g.node_attr['width'] = params['width']
     g.node_attr['height'] = params['height']
-    g.format = 'png'
+    g.format = params['format']
     # g.render('StoryMatch.gv', view=True)
-    g.render('story5.gv')
+    output="story1.gv"
+    g.render(output)
+    print("output "+output+"."+params['format'])
 
 
 if __name__ == '__main__':
