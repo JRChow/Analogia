@@ -56,6 +56,7 @@ def viz(i_x, i_y, i_r, g, pair=False):
         if r=="-1":  # "bold node, no relation"
             g.node(x, penwidth=PENWIDTH)
             g.node(y, penwidth=PENWIDTH)
+
         elif r == "0":  # "causal":
             g.node(y, penwidth=PENWIDTH)
             g.node(x, fillcolor='yellow', style='filled', penwidth=PENWIDTH)
@@ -136,16 +137,25 @@ def make_viz(sent_arr, list_of_relation_mat, g, pair=False):
             for y in relation_mat:
                 i_x = 0
                 for x in y:
+                    annotation="\n["+str(pair)+"]"
                     if x == 0:
-                        i_r=-1
-                        g.node(str(node_num_dict.get(sent_arr[i_x])), sent_arr[i_x]+"\n["+str(pair)+"]")
-                        g.node(str(node_num_dict.get(sent_arr[i_y])), sent_arr[i_y] + "\n[" + str(pair) + "]")
-                        viz(node_num_dict.get( sent_arr[i_x]+"\n["+str(pair)+"]" ), node_num_dict.get(sent_arr[i_y]+"\n["+str(pair)+"]"), i_r, g, pair)
+                        i_r = -1  #make nodes bold
+                        g.node(str(node_num_dict.get(sent_arr[i_x])), sent_arr[i_x]+annotation)
+                        g.node(str(node_num_dict.get(sent_arr[i_y])), sent_arr[i_y] + annotation)
+                        #update dict
+                        node_num_dict[sent_arr[i_y] + annotation]=node_num_dict.get(sent_arr[i_y])
+                        #del old entries
+                        del node_num_dict[sent_arr[i_x]]
+                        viz(node_num_dict.get( sent_arr[i_x]+annotation ), node_num_dict.get(sent_arr[i_y]+annotation), i_r, g, pair)
                     if x == 1:
-                        g.node(str(node_num_dict.get(sent_arr[i_x])), sent_arr[i_x]+"\n["+str(pair)+"]")
-                        g.node(str(node_num_dict.get(sent_arr[i_y])), sent_arr[i_y] + "\n[" + str(pair) + "]")
-                        viz(node_num_dict.get(sent_arr[i_x] + "\n[" + str(pair) + "]"),
-                            node_num_dict.get(sent_arr[i_y] + "\n[" + str(pair) + "]"), i_r, g, pair)
+                        g.node(str(node_num_dict.get(sent_arr[i_x])), sent_arr[i_x]+annotation)
+                        g.node(str(node_num_dict.get(sent_arr[i_y])), sent_arr[i_y] + annotation)
+                        # update dict
+                        node_num_dict[sent_arr[i_y] + annotation] = node_num_dict.get(sent_arr[i_y])
+                        # del old entries
+                        del node_num_dict[sent_arr[i_x]]
+                        viz(node_num_dict.get(sent_arr[i_x] + annotation),
+                            node_num_dict.get(sent_arr[i_y] + annotation), i_r, g, pair)
 
                     i_x += 1
                 i_y += 1
